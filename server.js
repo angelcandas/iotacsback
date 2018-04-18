@@ -41,7 +41,9 @@ app.post('/signin',(req,res) => {signin.signinHandler(req,res,db,bcrypt)})
 
 app.post('/register',(req,res) => {register.registerHandler(req,res,db,bcrypt)})
 
-app.listen(3000,() =>{console.log("Server running in port 3000")});
+app.listen(process.env.PORT || 3000,() =>{
+	console.log(`Server running in port ${process.env.PORT}`);
+});
 
 /*
 / --> res = this is working
