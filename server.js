@@ -10,13 +10,20 @@ const signin = require('./controllers/signin');
 const image = require('./controllers/image');
 const profile = require('./controllers/profile');
 
+const { Client } = require('pg');
+
+const client = new Client({
+	connectionString: process.env.DATABASE_URL,
+	ssl: true,
+});
+
+client.connect();
+
 const db=knex({
   client: 'pg',
   connection: {
-    host : 'postgresql-asymmetrical-42556',
-    user : 'fzfkmjucgbsdpw',
-    password : '',
-    database : 'smartbrain'
+ 	connectionString: process.env.DATABASE_URL,
+	ssl: true,
   }
 });
 
