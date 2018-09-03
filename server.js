@@ -1,7 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const bcrypt = require('bcrypt-nodejs');
-const https = require('https');
+const http = require('http');
 const app = express();
 const cors = require('cors');
 const knex = require('knex');
@@ -161,7 +161,7 @@ var authorizeSubscribe = function(client, topic, callback) {
 //Starting mosca over express
 
 let broker = new mosca.Server({});
-let server = https.createServer(app);
+let server = http.createServer(app);
 broker.attachHttpServer(server);
 server.listen(app);
 //here we start mosca
