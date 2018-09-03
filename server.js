@@ -95,7 +95,7 @@ app.listen(process.env.PORT || 3000,() =>{
   console.log("Server running in port " + process.env.PORT);
 });
 
-
+/*
 /*A PARTIR DE AQUI SE ENCONTRARA EL CODIGO DE LA PARTE PUBLISHER SUBSCRIBER DEL PROYECTO
 */
 /*
@@ -178,6 +178,7 @@ httpServ.listen(process.env.MQTT_WS_PORT || 5200);
 console.log("Web socket: "+process.env.MQTT_WS_PORT)
 console.log("Mosca socket: "+process.env.MQTT_PORT)
 */
+/*
 server.on('ready', ()=>{
   server.authenticate = authenticate;
   server.authorizePublish = authorizePublish;
