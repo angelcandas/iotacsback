@@ -39,7 +39,7 @@ const { Client } = require('pg');
 const db=knex({
   client: 'pg',
   connection:{
-    host: process.env.DATABASE_URL || '127.0.0.1',
+    connectionString: process.env.DATABASE_URL || '127.0.0.1',
     ssl: true
   }
 });
