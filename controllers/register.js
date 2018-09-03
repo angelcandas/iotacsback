@@ -1,4 +1,4 @@
-
+const dataget = require('./dataget');
 
 const registerHandler = (req,res,db,bcrypt) =>{
 	const {email,name,password} = req.body;
@@ -8,8 +8,10 @@ const registerHandler = (req,res,db,bcrypt) =>{
 	}
 
 	const hash = bcrypt.hashSync(password);
+	const key = dataget.gen();
 	db.transaction(trx =>{
 		trx.insert({
+			key: key,
 			hash: hash,
 			email:email
 		})
@@ -19,6 +21,7 @@ const registerHandler = (req,res,db,bcrypt) =>{
 			return trx('users')
 			.returning('*')
 			.insert({
+				key: key,
 				email: loginEmail[0],
 				name: name,
 				joined: new Date()
@@ -29,9 +32,7 @@ const registerHandler = (req,res,db,bcrypt) =>{
 		})
 		.then(trx.commit)
 		.catch(trx.rollback)
-
-	})
-			.catch(err => res.status(400).json('unable to register'))
+		}).catch(err => res.status(400).json('unable to register'))
 			//IMPORTANTE no dar datos de la existencia de usuarios
 		
 
