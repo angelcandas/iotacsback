@@ -1,7 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const bcrypt = require('bcrypt-nodejs');
-const http = require('http');
+const https = require('https');
 const app = express();
 const cors = require('cors');
 const knex = require('knex');
@@ -65,7 +65,7 @@ app.use(cors()) //IMPORTANTE VERIFICACION CROSS ORIGINS
 app.use(bodyParser.json()); // CONTROLADOR DE PARSEO DE JSON
 
 app.get('/',(req,res)=>{res.status(200).json("Everything works fine!")}) // RESPUESTA POR DEFECTO DEL SERVIDOR
-app.get('/mqtt',(req,res)=>{console.log(req)});
+
 app.get('/profile/:id',(req,res)=>{profile.profileHandler(req,res,db)})
 
 app.post('/token',(req,res)=>{dataget.tokenGen(req,res,db)})
@@ -160,9 +160,10 @@ var authorizeSubscribe = function(client, topic, callback) {
 
 //Starting mosca over express
 
-let server = new mosca.Server({});
-let broker = http.createServer(app);
+let broker = new mosca.Server({});
+let server = https.createServer(app);
 server.attachHttpServer(broker);
+broker.listen(app)
 //here we start mosca
 /*
 httpServ = http.createServer()
