@@ -168,7 +168,7 @@ var authorizeSubscribe = function(client, topic, callback) {
 let broker = new mosca.Server({});
 let server = http.createServer(app);
 broker.attachHttpServer(server);
-
+server.listen(process.env.PORT);
 //here we start mosca
 /*
 httpServ = http.createServer()
@@ -189,7 +189,7 @@ server.on('ready', ()=>{
 // fired when the mqtt server is ready
  
 // fired whena  client is connected
-server.on('connection', function(client) {
+server.on('connected', function(client) {
   console.log('client connected', client.id);
 });
  
