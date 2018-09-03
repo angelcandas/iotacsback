@@ -34,7 +34,8 @@ const db=knex({
     password: '3209',
     port: 5432,
   }
-});*/
+});
+*/
 
 const client = new Client({
   connectionString: process.env.DATABASE_URL,
@@ -157,13 +158,10 @@ var authorizeSubscribe = function(client, topic, callback) {
 }
 
 //Starting mosca over express
-var broker = new mosca.Server({});
-var server = http.createServer(app)
-var path = require("path");
 
-app.use(express.static(path.dirname(require.resolve("mosca")) + "/public"))
-
-
+let server = new mosca.Server({});
+let broker = http.createServer(app);
+server.attachHttpServer(broker);
 //here we start mosca
 /*
 httpServ = http.createServer()
@@ -173,15 +171,15 @@ httpServ.listen(process.env.MQTT_WS_PORT || 5200);
 console.log("Web socket: "+process.env.MQTT_WS_PORT)
 console.log("Mosca socket: "+process.env.MQTT_PORT)
 */
-server.on('ready', setup);
-
-// fired when the mqtt server is ready
-function setup() {
+server.on('ready', ()=>{
   server.authenticate = authenticate;
   server.authorizePublish = authorizePublish;
   server.authorizeSubscribe = authorizeSubscribe;
   console.log('Mosca server is up and running')
-}
+
+});
+
+// fired when the mqtt server is ready
  
 // fired whena  client is connected
 server.on('clientConnected', function(client) {
