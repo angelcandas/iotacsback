@@ -91,6 +91,11 @@ app.post('/register',(req,res) => {register.registerHandler(req,res,db,bcrypt)})
 app.get('/*',(req,res)=>{res.status(404).json("File Not Found!")})
 
 
+app.listen(process.env.PORT || 3000,() =>{
+  console.log("Server running in port " + process.env.PORT);
+});
+
+
 /*A PARTIR DE AQUI SE ENCONTRARA EL CODIGO DE LA PARTE PUBLISHER SUBSCRIBER DEL PROYECTO
 */
 
@@ -98,7 +103,7 @@ app.get('/*',(req,res)=>{res.status(404).json("File Not Found!")})
 var settings = {
   port: process.env.PORT || 1883,
 };
- 
+
 
 // Accepts the connection if the username and password are valid
 var authenticate = function(client, username, password, callback) {
@@ -240,9 +245,6 @@ server.on('clientDisconnected', function(client) {
 
 
 
-app.listen(process.env.PORT || 3000,() =>{
-  console.log("Server running in port " + process.env.PORT);
-});
 
 
 
