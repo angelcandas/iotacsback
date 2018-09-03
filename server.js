@@ -14,15 +14,18 @@ const profile = require('./controllers/profile');
 const insert =  require('./controllers/insert');
 const mosca = require('mosca');
 const { Client } = require('pg');
-
+/*
 const client = new Client({
-  connectionString: process.env.DATABASE_URL,
-  ssl: true,
+    user: 'postgres',
+    host: process.env.DATABASE_URL || '127.0.0.1',
+    database: 'smartbrain',
+    password: '3209',
+    port: 5432,
 });
 
 client.connect();
 
-/*const db=knex({
+const db=knex({
   client: 'pg',
   connection:{
     user: 'postgres',
@@ -33,6 +36,12 @@ client.connect();
   }
 });*/
 
+const client = new Client({
+  connectionString: process.env.DATABASE_URL,
+  ssl: true,
+});
+
+client.connect();
 const db=knex({
   client: 'pg',
   connection:{
@@ -148,12 +157,8 @@ var authorizeSubscribe = function(client, topic, callback) {
 }
 
 //Starting mosca over express
-var mosca = require("mosca");
 var broker = new mosca.Server({});
-var express = require("express");
-var http = require("http");
-var app = express()
-var srv = http.createServer(app)
+var server = http.createServer(app)
 var path = require("path");
 
 app.use(express.static(path.dirname(require.resolve("mosca")) + "/public"))
