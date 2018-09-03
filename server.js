@@ -88,6 +88,7 @@ app.post('/signin',(req,res) => {signin.signinHandler(req,res,db,bcrypt)})
 
 app.post('/register',(req,res) => {register.registerHandler(req,res,db,bcrypt)})
 
+app.get('/*',(req,res)=>{res.status(404).json("File Not Found!")})
 
 
 /*A PARTIR DE AQUI SE ENCONTRARA EL CODIGO DE LA PARTE PUBLISHER SUBSCRIBER DEL PROYECTO
@@ -159,9 +160,9 @@ var authorizeSubscribe = function(client, topic, callback) {
 
 //Starting mosca over express
 
-let broker = new mosca.Server({});
-let server = http.createServer(app);
-broker.attachHttpServer(server);
+let server = new mosca.Server({});
+let broker = http.createServer(app);
+server.attachHttpServer(broker);
 //here we start mosca
 /*
 httpServ = http.createServer()
@@ -182,8 +183,8 @@ server.on('ready', ()=>{
 // fired when the mqtt server is ready
  
 // fired whena  client is connected
-server.on('clientConnected', function(client) {
-  //console.log('client connected', client.id);
+server.on('connection', function(client) {
+  console.log('client connected', client.id);
 });
  
 // fired when a message is received

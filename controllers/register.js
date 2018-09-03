@@ -13,7 +13,7 @@ const registerHandler = (req,res,db,bcrypt) =>{
 		trx.insert({
 			key: key,
 			hash: hash,
-			email:email
+			email:email,
 		})
 		.into('login')
 		.returning('email')
@@ -27,6 +27,7 @@ const registerHandler = (req,res,db,bcrypt) =>{
 				joined: new Date()
 			})
 			.then(user =>{
+				console.log("Hola mundo")
 				res.json(user[0]);
 			})
 		})

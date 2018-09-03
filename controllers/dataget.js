@@ -99,8 +99,8 @@ const tokengen=(req,res,db)=>{
 				show1: 0,
 				show2: 0,
 				show3: 0,
-				show4: -30,
-				show5: 30,
+				show4: 0,
+				show5: 100,
 				show6: 'L',
 			})
 			.into('tokens')
