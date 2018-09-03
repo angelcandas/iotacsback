@@ -65,7 +65,7 @@ app.use(cors()) //IMPORTANTE VERIFICACION CROSS ORIGINS
 app.use(bodyParser.json()); // CONTROLADOR DE PARSEO DE JSON
 
 app.get('/',(req,res)=>{res.status(200).json("Everything works fine!")}) // RESPUESTA POR DEFECTO DEL SERVIDOR
-
+app.get('/mqtt',(req,res)=>{console.log(req)});
 app.get('/profile/:id',(req,res)=>{profile.profileHandler(req,res,db)})
 
 app.post('/token',(req,res)=>{dataget.tokenGen(req,res,db)})
