@@ -98,7 +98,7 @@ app.listen(process.env.PORT || 3000,() =>{
 
 /*A PARTIR DE AQUI SE ENCONTRARA EL CODIGO DE LA PARTE PUBLISHER SUBSCRIBER DEL PROYECTO
 */
-
+/*
 
 var settings = {
   port: process.env.PORT || 1883,
@@ -247,7 +247,7 @@ server.on('clientDisconnected', function(client) {
 
 
 
-
+*/
 
 
 /*----FIN PUBLISHER SUBSCRIBER----*/
