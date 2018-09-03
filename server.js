@@ -15,15 +15,12 @@ const insert =  require('./controllers/insert');
 const mosca = require('mosca');
 const { Client } = require('pg');
 
-/*const client = new Client({
-  user: 'postgres',
-  host: process.env.DATABASE_URL || '127.0.0.1',
-  database: 'smartbrain',
-  password: '3209',
-  port: 5432,
-})*/
+const client = new Client({
+  connectionString: process.env.DATABASE_URL,
+  ssl: true,
+});
 
-//client.connect();
+client.connect();
 
 /*const db=knex({
   client: 'pg',
@@ -160,7 +157,7 @@ var server = new mosca.Server(settings);
 server.attachHttpServer(httpServ);
 httpServ.listen(process.env.MQTT_WS_PORT || 5200);
 console.log("Web socket: "+process.env.MQTT_WS_PORT)
-console.log("Web socket: "+process.env.MQTT_PORT)
+console.log("Mosca socket: "+process.env.MQTT_PORT)
 server.on('ready', setup);
 
 // fired when the mqtt server is ready
