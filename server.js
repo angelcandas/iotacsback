@@ -168,7 +168,7 @@ var authorizeSubscribe = function(client, topic, callback) {
 let broker = new mosca.Server({});
 let server = http.createServer(app);
 broker.attachHttpServer(server);
-server.listen(app);
+
 //here we start mosca
 /*
 httpServ = http.createServer()
