@@ -78,9 +78,6 @@ app.post('/signin',(req,res) => {signin.signinHandler(req,res,db,bcrypt)})
 
 app.post('/register',(req,res) => {register.registerHandler(req,res,db,bcrypt)})
 
-app.listen(process.env.PORT || 3000,() =>{
-	console.log("Server running in port " + process.env.PORT);
-});
 
 
 /*A PARTIR DE AQUI SE ENCONTRARA EL CODIGO DE LA PARTE PUBLISHER SUBSCRIBER DEL PROYECTO
@@ -88,7 +85,7 @@ app.listen(process.env.PORT || 3000,() =>{
 
 
 var settings = {
-  port: process.env.MQTT_PORT || 1883,
+  port: process.env.PORT || 1883,
 };
  
 
@@ -150,14 +147,27 @@ var authorizeSubscribe = function(client, topic, callback) {
   callback(null, true);
 }
 
+//Starting mosca over express
+var mosca = require("mosca");
+var broker = new mosca.Server({});
+var express = require("express");
+var http = require("http");
+var app = express()
+var srv = http.createServer(app)
+var path = require("path");
+
+app.use(express.static(path.dirname(require.resolve("mosca")) + "/public"))
+
 
 //here we start mosca
+/*
 httpServ = http.createServer()
 var server = new mosca.Server(settings);
 server.attachHttpServer(httpServ);
 httpServ.listen(process.env.MQTT_WS_PORT || 5200);
 console.log("Web socket: "+process.env.MQTT_WS_PORT)
 console.log("Mosca socket: "+process.env.MQTT_PORT)
+*/
 server.on('ready', setup);
 
 // fired when the mqtt server is ready
@@ -225,6 +235,9 @@ server.on('clientDisconnected', function(client) {
 
 
 
+app.listen(process.env.PORT || 3000,() =>{
+  console.log("Server running in port " + process.env.PORT);
+});
 
 
 
