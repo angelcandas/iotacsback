@@ -101,7 +101,7 @@ const tokengen=(req,res,db)=>{
 				show3: 0,
 				show4: 0,
 				show5: 100,
-				show6: 'L',
+				show6: 'Lineal',
 			})
 			.into('tokens')
 			.returning('token')

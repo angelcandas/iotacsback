@@ -37,6 +37,31 @@ const registerHandler = (db,bcrypt) =>{
 
 }
 
+const insertData = (req,res,db) =>{
+	const {message,token,sentido} = req.body;
+	console.log(message,token,sentido)
+	if(!message || !token || !sentido){
+		return res.json({"auth":false});
+	}
+	db.transaction(trx =>{
+		trx.insert({
+			data: message,
+			token: token,
+			sentido: sentido,
+		})
+		.into('data')
+		.then(m =>{
+			res.json({"auth":true});
+		})
+		.then(trx.commit)
+		.catch(trx.rollback)
+		.catch(err => res.status(400).json('unable to register'))
+})
+}
+
+
+
 module.exports = {
-	registerHandler: registerHandler
+	registerHandler: registerHandler,
+	insertData: insertData,
 }

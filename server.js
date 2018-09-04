@@ -12,6 +12,7 @@ const signin = require('./controllers/signin');
 const image = require('./controllers/image');
 const profile = require('./controllers/profile');
 const insert =  require('./controllers/insert');
+const auth =  require('./controllers/auth');
 const mosca = require('mosca');
 const { Client } = require('pg');
 /*
@@ -87,6 +88,12 @@ app.post('/imageurl',image.handleApiCall())
 app.post('/signin',(req,res) => {signin.signinHandler(req,res,db,bcrypt)})
 
 app.post('/register',(req,res) => {register.registerHandler(req,res,db,bcrypt)})
+
+app.post('/auth',(req,res)=>{auth.authorized(req,res,db,bcrypt)})
+
+app.post('/apub',(req,res)=>{auth.pubauthorized(req,res,db,bcrypt)})
+
+app.post('/publish',(req,res)=>{insert.insertData(req,res,db,bcrypt)})
 
 app.get('/*',(req,res)=>{res.status(404).json("File Not Found!")})
 
