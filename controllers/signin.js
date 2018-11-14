@@ -1,4 +1,4 @@
-
+const jwt = require('./jwt')
 const signinHandler= (req,res,db,bcrypt) =>{
 	const {email, password} = req.body;
 	if(!email || !password){
@@ -12,7 +12,10 @@ const signinHandler= (req,res,db,bcrypt) =>{
 			return db.select('*').from('users')
 			.where('email','=',email)
 			.then(user =>{
-				res.json(user[0])
+				res.status(200).json({
+						user: user,
+						token: jwt.createToken(user)
+					})
 			})
 			.catch(err => res.status(400).json('unable to get user'))
 		}else{

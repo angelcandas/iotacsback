@@ -9,13 +9,13 @@ const knex = require('knex');
 const dataget = require('./controllers/dataget');
 const register = require('./controllers/register');
 const signin = require('./controllers/signin');
-const image = require('./controllers/image');
 const profile = require('./controllers/profile');
 const insert =  require('./controllers/insert');
 const auth =  require('./controllers/auth');
 const mosca = require('mosca');
+var md_auth = require('./middlewares/authenticated')
 const { Client } = require('pg');
-/*
+
 const client = new Client({
     user: 'postgres',
     host: process.env.DATABASE_URL || '127.0.0.1',
@@ -36,9 +36,9 @@ const db=knex({
     port: 5432,
   }
 });
-*/
 
-const client = new Client({
+
+/*const client = new Client({
   connectionString: process.env.DATABASE_URL,
   ssl: true,
 });
@@ -50,7 +50,7 @@ const db=knex({
     connectionString: process.env.DATABASE_URL || '127.0.0.1',
     ssl: true
   }
-});
+});*/
 
 /*db.select('*').from('users').then(data =>{
 console.log(data)
@@ -65,41 +65,49 @@ app.use(cors()) //IMPORTANTE VERIFICACION CROSS ORIGINS
 
 app.use(bodyParser.json()); // CONTROLADOR DE PARSEO DE JSON
 
+/*app.use((req,res,next)=>{
+  res.header('Access-Control-Allow-Origin','*');
+  res.header('Access-Control-Allow-Headers','Authorization, X-API-KEY,Origin,X-Requested-With,Content-Type,Accept,Access-Control-Allow-Request-Method');
+  res.header('Access-Control-Allow-Methods','GET,POST,OPTIONS,PUT,DELETE');
+  res.header('Allow','GET,POST,OPTIONS,PUT,DELETE');
+  next();
+});*/
+
 app.get('/',(req,res)=>{res.status(200).json("Everything works fine!")}) // RESPUESTA POR DEFECTO DEL SERVIDOR
 
-app.get('/profile/:id',(req,res)=>{profile.profileHandler(req,res,db)})
+app.get('/profile/:id',md_auth.ensureAuth,(req,res)=>{profile.profileHandler(req,res,db)})
 
-app.post('/token',(req,res)=>{dataget.tokenGen(req,res,db)})
+app.post('/token',md_auth.ensureAuth,(req,res)=>{dataget.tokenGen(req,res,db)})
 
-app.delete('/token',(req,res)=>{dataget.tokenDel(req,res,db)})
+app.delete('/token',md_auth.ensureAuth,(req,res)=>{dataget.tokenDel(req,res,db)})
 
-app.get('/:token',(req,res)=>{dataget.datagetHandler(req,res,db)})
+app.get('/:token',md_auth.ensureAuth,(req,res)=>{dataget.datagetHandler(req,res,db)})
 
-app.post('/tokendat',(req,res)=>{dataget.datadevice(req,res,db)})
+app.get('/shadow/:token2',md_auth.ensureAuth,(req,res)=>{dataget.dataget_last(req,res,db)})
 
-app.put('/:token',(req,res)=>{dataget.dataUpdate(req,res,db)})
+app.post('/tokendat',md_auth.ensureAuth,(req,res)=>{dataget.datadevice(req,res,db)})
 
-app.get('/tokens/:user',(req,res)=>{dataget.tokensHandler(req,res,db)})
+app.put('/:token',md_auth.ensureAuth,(req,res)=>{dataget.dataUpdate(req,res,db)})
 
-app.put('/image',image.imageHandler(db))
-
-app.post('/imageurl',image.handleApiCall())
+app.get('/tokens/:user',md_auth.ensureAuth,(req,res)=>{dataget.tokensHandler(req,res,db)})
 
 app.post('/signin',(req,res) => {signin.signinHandler(req,res,db,bcrypt)})
 
 app.post('/register',(req,res) => {register.registerHandler(req,res,db,bcrypt)})
 
+//Metodos del serviedor MQTT
 app.post('/auth',(req,res)=>{auth.authorized(req,res,db,bcrypt)})
 
 app.post('/apub',(req,res)=>{auth.pubauthorized(req,res,db,bcrypt)})
 
 app.post('/publish',(req,res)=>{insert.insertData(req,res,db,bcrypt)})
 
+//Ruta por defecto
 app.get('/*',(req,res)=>{res.status(404).json("File Not Found!")})
 
 
-app.listen(process.env.PORT || 3000,() =>{
-  console.log("Server running in port " + process.env.PORT);
+app.listen(3000,() =>{
+  console.log("Server running in port " + app.PORT);
 });
 
 /*

@@ -18,7 +18,23 @@ const dataget= (req,res,db) =>{
 			})
 	}
 }
-
+const dataget_last= (req,res,db) =>{
+	const {token2} = req.params;
+	console.log(token2)
+	if(!token2){
+		return res.status(400).json('incorrect form submission');
+	}
+	else{
+		db.select('*').from('tokens').join('data',function(){this.on('tokens.token','=','data.token').orOn('tokens.token','=','data.token')})
+		.where('sentido','pub').where('tokens.token',token2).orderBy('ts', 'desc').limit(1)
+		.then(data =>{
+			res.json(data)
+		})
+		.catch(err => {
+			console.log(err)
+			res.status(400).json('Wrong credentials')
+			})
+	}}
 const dataget_one= (req,res,db) =>{
 	const {token} = req.body;
 	if(!token){
@@ -68,13 +84,15 @@ const tokendel= (req,res,db) =>{
 		})
 }
 const dataUpdate= (req,res,db) =>{
-			const {token,name,measuring,units,devicename,tipo,show6} = req.body;
+			const {token,name,measuring,units,devicename,tipo,show4,show5,show6} = req.body;
 			db('tokens').update({
             	name: name,
             	measuring: measuring,
             	units: units,
             	devicename: devicename,
             	tipo: tipo,
+            	show4:show4,
+            	show5:show5,
             	show6:show6
 				}).where('token','=',token)
 			.then(data=>
@@ -131,4 +149,5 @@ module.exports={
 	tokenDel: tokendel,
 	dataUpdate: dataUpdate,
 	datadevice: dataget_one,
+	dataget_last: dataget_last,
 }
